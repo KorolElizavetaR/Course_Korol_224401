@@ -15,5 +15,9 @@ public:
 		this->login = "";
 		this->password = "";
 	}
+	string GetLogin()
+	{
+		return this->login;
+	}
 };
 

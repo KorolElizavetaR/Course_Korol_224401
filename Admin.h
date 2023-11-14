@@ -1,5 +1,6 @@
 #pragma once
 #include "User.h"
+
 class Admin : public User
 {
 public:
@@ -9,9 +10,10 @@ public:
     Admin():User()
     {
     }
-	void SetLogin(vector <User*> vc)
+	void SetLogin(LogIntoTheSystem& log)
 	{
         string login;
+        LogIntoTheSystem log();
         bool repeat = 0;
         do
         {
@@ -40,13 +42,11 @@ public:
                 repeat = 1;
                 continue;
             }
-            for (int i = 0; i < vc.size(); i++)
-                if (login == vc[i].login)
-                {
-                    cout << "Данный логин уже занят. Придумайте новый." << endl;
-                    repeat = 1;
-                    break;
-                }
+            if (log.FindByLogin(login))
+            {
+                cout << "Логин уже занят. Придумайте новый." << endl;
+                continue;
+            }
             if (!repeat)
             {
                 this->password = password;
@@ -54,6 +54,9 @@ public:
             }
         } while (repeat);
 	}
+    void SetPassword()
+    {
 
+    }
 };
 
