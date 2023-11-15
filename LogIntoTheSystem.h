@@ -12,13 +12,6 @@ class LogIntoTheSystem
 	vector <User*> users;
 	int size;
 
-	LogIntoTheSystem()
-	{	
-		this->size = 0;
-		if (Fillauthorizationfile())
-			EmergencyAdminFile();
-	}
-
 	bool Fillauthorizationfile()
 	{
 		ifstream file;
@@ -28,14 +21,14 @@ class LogIntoTheSystem
 
 		string login;
 		string password;
-		bool role;
+		string role;
 			
 		while (!file.eof())
 		{
 			file >> login >> password >> role;
-			if (role == false)
+			if (role == "0")
 				users.push_back(new User(login, password));
-			else if (role == true)
+			else if (role == "1")
 				users.push_back(new Admin(login, password));
 			size++;
 		} 
@@ -50,13 +43,13 @@ class LogIntoTheSystem
 		ofstream file;
 		file.open(USERS);
 		Admin user;
-		string login;
-		string password;
-		bool role;
+
 		user.SetLogin(*this);
-		file << login << " " << password << " " << "1";
-		users.push_back(new Admin(login, password));
-		size++;
+		user.SetPassword();
+
+		file << user.GetLogin() << " " << user.GetPassword() << " " << "1";
+		users.push_back(&user);
+		this->size++;
 		file.close();
 	}
 		
@@ -64,15 +57,17 @@ public:
 
 	LogIntoTheSystem()
 	{
-		Fillauthorizationfile();
+		this->size = 0;
+		if (Fillauthorizationfile())
+			EmergencyAdminFile();
 	}
 
 	int FindByLogin(string login)
 	{
-		for (auto i : users)
+		for (int i = 0; i<size;i++)
 		{
-			if ((*i).GetLogin() == login)
-				return true;
+			if (users[i]->GetLogin() == login)
+				return i;
 		}
 	}
 };

@@ -56,6 +56,22 @@ public:
 	}
     void SetPassword()
     {
+        string password;
+        while (true)
+        {
+            cout << "Пароль(не меньше 6 символов):";
+            cin >> password;
+            if (password.size() < 6)
+            {
+                cout << "Пароль слишком короткий.Введите другой." << endl;;
+                continue;
+            }
+            this->password = password;
+        }
+    }
+
+    void AdminMenu()
+    {
 
     }
 };
