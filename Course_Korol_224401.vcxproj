@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Admin.h" />
+    <ClInclude Include="FileException.h" />
     <ClInclude Include="LogIntoTheSystem.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>

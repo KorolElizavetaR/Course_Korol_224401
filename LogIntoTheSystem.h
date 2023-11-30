@@ -3,21 +3,23 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iostream>
 #include "User.h"
+#include "FileException.h"
 
 using namespace std;
 
 class LogIntoTheSystem
-{
+{ 
 	vector <User*> users;
 	int size;
 
-	bool Fillauthorizationfile()
+	void Fillauthorizationfile()
 	{
 		ifstream file;
 		file.open(USERS);
 		if (!file.is_open() || file.peek() == EOF)
-			return true;
+			throw FileException(USERS);
 
 		string login;
 		string password;
@@ -34,12 +36,12 @@ class LogIntoTheSystem
 		} 
 
 		file.close();
-		return false;
 	}
 
 	void EmergencyAdminFile()
 	{
 		cout << "ќшибка при открытии файла. ¬ведите данные об администраторе." << endl;
+		// ѕерекинуть в класс админа;
 		ofstream file;
 		file.open(USERS);
 		Admin user;
@@ -58,8 +60,29 @@ public:
 	LogIntoTheSystem()
 	{
 		this->size = 0;
-		if (Fillauthorizationfile())
+		try
+		{
+			Fillauthorizationfile();
+		}
+		catch(FileException &ex)
+		{
+			cout << ex.what() << ex.GetFileName();
 			EmergencyAdminFile();
+		}
+
+
+	}
+	void LogIn()
+	{
+		string login;
+		string password;
+		int attempts = 6;
+		while (--attempts != 0)
+		{
+			cout << "¬ведите логин: ";
+			cin >> login;
+
+		}
 	}
 
 	int FindByLogin(string login)
