@@ -10,8 +10,10 @@
 using namespace std;
 
 class LogIntoTheSystem
-{ 
+{  
 	vector <User*> users;
+	vector<User*>::iterator AuthorizedUser;
+
 	int size;
 
 	void Fillauthorizationfile()
@@ -24,7 +26,8 @@ class LogIntoTheSystem
 		string login;
 		string password;
 		string role;
-			
+			//Проверка на существование логина
+			//Проверка на корректность записи в строке
 		while (!file.eof())
 		{
 			file >> login >> password >> role;
@@ -69,10 +72,13 @@ public:
 			cout << ex.what() << ex.GetFileName();
 			EmergencyAdminFile();
 		}
-
-
+		if (LogInAsUser())
+		{
+			cout << "Вы вошли под логином " << (*AuthorizedUser)->GetLogin() << "под ролью" << (*AuthorizedUser)->GetStringRole();
+		}
 	}
-	void LogIn()
+
+	bool LogInAsUser()
 	{
 		string login;
 		string password;
@@ -81,17 +87,45 @@ public:
 		{
 			cout << "Введите логин: ";
 			cin >> login;
-
+			cout << "Введите пароль: ";
+			cin >> password;
+			try
+			{
+				vector<User*>::iterator Iuser = FindByLogin(login);
+				if ((*Iuser)->GetPassword() == password)
+				{
+					AuthorizedUser = Iuser;
+					return true;
+				}
+				else
+				{
+					cout << "Неверные данные при входе.";
+				}
+			}
+			catch(exception &ex)
+			{
+				cout << ex.what();
+			}
+			cout << "Осталось попыток: " << attempts << endl;
 		}
+		return false;
 	}
 
-	int FindByLogin(string login)
+	vector<User*>::iterator FindByLogin(string login)
 	{
-		for (int i = 0; i<size;i++)
+		for (vector<User*>::iterator Iuser = users.begin(); Iuser != users.end(); Iuser++)
 		{
-			if (users[i]->GetLogin() == login)
-				return i;
+			if ((*Iuser)->GetLogin() == login)
+			{
+				return Iuser;
+			}
 		}
+		throw exception("Пользователь не найден. ");
+	}
+
+	vector<User*>::iterator users_end()
+	{
+		return users.end();
 	}
 };
 

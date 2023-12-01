@@ -4,8 +4,9 @@ class User
 protected:
 	string login;
 	string password;
+	bool role;
 public:
-	User(string login, string password)
+	User(string login, string password):User()
 	{
 		this->login = login;
 		this->password = password;
@@ -14,6 +15,7 @@ public:
 	{
 		this->login = "";
 		this->password = "";
+		this->role = false;
 	}
 	string GetLogin()
 	{

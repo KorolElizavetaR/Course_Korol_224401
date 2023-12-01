@@ -6,9 +6,11 @@ class Admin : public User
 public:
 	Admin(string name, string password) :User(name, password)
 	{
+        this->role = true;
 	}
     Admin():User()
     {
+        this->role = true;
     }
 	void SetLogin(LogIntoTheSystem& log)
 	{
@@ -42,7 +44,7 @@ public:
                 repeat = 1;
                 continue;
             }
-            if (log.FindByLogin(login))
+            if (log.FindByLogin(login) != log.users_end())
             {
                 cout << "Логин уже занят. Придумайте новый." << endl;
                 continue;
@@ -70,7 +72,7 @@ public:
         }
     }
 
-    void AdminMenu()
+    void Menu_accounts()
     {
         cout << "\tРедактирование учетных записей" << endl;
         cout << "1.Просмотр учетных записей" << endl;
@@ -78,6 +80,10 @@ public:
         cout << "3.Редактирование учетной записи" << endl;
         cout << "4.Удаление учетной записи" << endl;
     }
-    void AddAdmin
+
+    string GetStringRole() override
+    {
+        return "администратор";
+    }
 };
 
