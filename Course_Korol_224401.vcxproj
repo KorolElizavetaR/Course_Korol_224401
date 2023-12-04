@@ -133,10 +133,10 @@
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Admin.h" />
+    <ClInclude Include="AllDependencies.h" />
     <ClInclude Include="FileException.h" />
     <ClInclude Include="LogIntoTheSystem.h" />
-    <ClInclude Include="User.h" />
+    <ClInclude Include="Users.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,14 @@
 #pragma once
+#include <iostream>
+#include <string>
+
+using namespace std;
 
 class FileException : public exception
 {
-	string filename;
+	const char* filename;
 public:
-	FileException(string filename) :exception("File is not found: ")
+	FileException(const char* filename) :exception("File is not found: ")
 	{
 		this->filename = filename;
 	}

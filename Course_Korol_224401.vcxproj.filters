@@ -32,13 +32,13 @@
     <ClInclude Include="LogIntoTheSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Admin.h">
+    <ClInclude Include="Users.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AllDependencies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

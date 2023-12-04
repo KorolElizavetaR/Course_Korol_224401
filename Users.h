@@ -1,8 +1,8 @@
 #pragma once
-#include <iostream>
-#include "LogIntoTheSystem.h"
+#include "AllDependencies.h"
 
 using namespace std;
+class LogIntoTheSystem;
 
 class User
 {
@@ -21,5 +21,14 @@ public:
     void SetPassword();
 };
 
+class Admin : public User
+{
+public:
 
+    Admin(string name, string password);
+
+    void Menu_accounts();
+
+    string GetStringRole() override;
+};
 

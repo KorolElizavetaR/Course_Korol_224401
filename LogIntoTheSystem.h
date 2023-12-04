@@ -1,20 +1,14 @@
 #pragma once
 #define USERS "Users.txt"
-#include <vector>
-#include <string>
-#include <fstream>
 
-#include "Admin.h"
-#include "User.h"
+#include "AllDependencies.h"
+#include "Users.h"
 #include "FileException.h"
 
-using namespace std;
-
 class LogIntoTheSystem
-{  
+{
 	vector <User*> users;
-	vector<User*>::const_iterator AuthorizedUser;
-
+	vector<User*>::iterator AuthorizedUser;
 	int size;
 
 	void Fillauthorizationfile()
@@ -27,8 +21,8 @@ class LogIntoTheSystem
 		string login;
 		string password;
 		string role;
-			//Проверка на существование логина
-			//Проверка на корректность записи в строке
+		//Проверка на существование логина
+		//Проверка на корректность записи в строке
 		while (!file.eof())
 		{
 			file >> login >> password >> role;
@@ -37,101 +31,21 @@ class LogIntoTheSystem
 			else if (role == "1")
 				users.push_back(new Admin(login, password));
 			size++;
-		} 
+		}
 
 		file.close();
 	}
 
-	void EmergencyAdminFile()
-	{
-		cout << "Ошибка при открытии файла. Введите данные об администраторе." << endl;
-		// Перекинуть в класс админа;
-		ofstream file;
-		file.open(USERS);
-		Admin *user;
-
-		user->SetLogin(*this);
-		user->SetPassword();
-
-		file << user->GetPassword() << " " << user->GetPassword() << " " << "1";
-		users.push_back(user);
-		this->size++;
-		file.close();
-	}
-		
 public:
 
-	LogIntoTheSystem()
-	{
-		this->size = 0;
-		try
-		{
-			Fillauthorizationfile();
-		}
-		catch(FileException &ex)
-		{
-			cout << ex.what() << ex.GetFileName();
-			EmergencyAdminFile();
-		}
-		if (LogInAsUser())
-		{
-			cout << "Вы вошли под логином " << (*AuthorizedUser)->GetLogin() << "под ролью" << (*AuthorizedUser)->GetStringRole();
-		}
-		else
-		{
-			throw exception("Произошли проблемы при подключении к аккаунту...");
-		}
-	}
+	LogIntoTheSystem();
 
-	bool LogInAsUser()
-	{
-		string login;
-		string password;
-		int attempts = 6;
-		while (--attempts != 0)
-		{
-			cout << "Введите логин: ";
-			cin >> login;
-			cout << "Введите пароль: ";
-			cin >> password;
-			try
-			{
-				vector<User*>::iterator Iuser;
-				Iuser = FindByLogin(login);
-				if ((*Iuser)->GetPassword() == password)
-				{
-					AuthorizedUser = Iuser;
-					return true;
-				}
-				else
-				{
-					cout << "Неверные данные при входе.";
-				}
-			}
-			catch(exception &ex)
-			{
-				cout << ex.what();
-			}
-			cout << "Осталось попыток: " << attempts << endl;
-		}
-		return false;
-	}
+	bool LogInAsUser();
 
-	vector<User*>::iterator FindByLogin(string login)
-	{
-		for (vector<User*>::iterator Iuser = users.begin(); Iuser != users.end(); Iuser++)
-		{
-			if ((*Iuser)->GetLogin() == login)
-			{
-				return Iuser;
-			}
-		}
-		throw exception("Пользователь не найден. ");
-	}
+	vector<User*>::iterator FindByLogin(string login);
 
-	vector<User*>::iterator users_end()
-	{
-		return users.end();
-	}
+	vector<User*>::iterator users_end();
 };
+
+
 

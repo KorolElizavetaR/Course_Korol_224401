@@ -1,8 +1,7 @@
-#include <iostream>
-#include <Windows.h>
+#include "AllDependencies.h"
+
 #include "LogIntoTheSystem.h"
 
-using namespace std;
 
 void main()
 {
