@@ -14,7 +14,7 @@ LogIntoTheSystem::LogIntoTheSystem()
 	}
 	if (LogInAsUser())
 	{
-		cout << "Вы вошли под логином " << (*AuthorizedUser)->GetLogin() << "под ролью" << (*AuthorizedUser)->GetStringRole();
+		cout << "Вы вошли под логином " << (*AuthorizedUser)->GetLogin() << "под ролью " << (*AuthorizedUser)->GetStringRole();
 	}
 	else
 	{

@@ -11,6 +11,7 @@ void main()
     try
     {
         LogIntoTheSystem authorization;
+        authorization.Menu();
     }
     catch (exception& ex)
     {

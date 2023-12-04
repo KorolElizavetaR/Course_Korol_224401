@@ -45,7 +45,22 @@ public:
 	vector<User*>::iterator FindByLogin(string login);
 
 	vector<User*>::iterator users_end();
+
+	void Menu()
+	{
+		(*AuthorizedUser)->Menu(*this);
+	}
+
+	void PrintAllAccounts()
+	{
+
+	}
 };
 
 
 
+//istream& operator>>(istream& is, User& item)
+//{
+//	is >> item.x >> item.y;
+//	return is;
+//}
