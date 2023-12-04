@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <iostream>
+
+#include "Admin.h"
 #include "User.h"
 #include "FileException.h"
 
@@ -12,7 +13,7 @@ using namespace std;
 class LogIntoTheSystem
 {  
 	vector <User*> users;
-	vector<User*>::iterator AuthorizedUser;
+	vector<User*>::const_iterator AuthorizedUser;
 
 	int size;
 
@@ -47,13 +48,13 @@ class LogIntoTheSystem
 		// Перекинуть в класс админа;
 		ofstream file;
 		file.open(USERS);
-		Admin user;
+		Admin *user;
 
-		user.SetLogin(*this);
-		user.SetPassword();
+		user->SetLogin(*this);
+		user->SetPassword();
 
-		file << user.GetLogin() << " " << user.GetPassword() << " " << "1";
-		users.push_back(&user);
+		file << user->GetPassword() << " " << user->GetPassword() << " " << "1";
+		users.push_back(user);
 		this->size++;
 		file.close();
 	}
@@ -76,6 +77,10 @@ public:
 		{
 			cout << "Вы вошли под логином " << (*AuthorizedUser)->GetLogin() << "под ролью" << (*AuthorizedUser)->GetStringRole();
 		}
+		else
+		{
+			throw exception("Произошли проблемы при подключении к аккаунту...");
+		}
 	}
 
 	bool LogInAsUser()
@@ -91,7 +96,8 @@ public:
 			cin >> password;
 			try
 			{
-				vector<User*>::iterator Iuser = FindByLogin(login);
+				vector<User*>::iterator Iuser;
+				Iuser = FindByLogin(login);
 				if ((*Iuser)->GetPassword() == password)
 				{
 					AuthorizedUser = Iuser;
