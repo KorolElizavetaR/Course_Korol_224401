@@ -10,7 +10,7 @@ void main()
     SetConsoleCP(1251);
     try
     {
-        LogIntoTheSystem authorization;
+        System authorization;
         authorization.Menu();
     }
     catch (exception& ex)

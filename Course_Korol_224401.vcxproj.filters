@@ -41,6 +41,12 @@
     <ClInclude Include="AllDependencies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Students.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scholarship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Users.txt" />

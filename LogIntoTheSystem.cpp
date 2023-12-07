@@ -1,7 +1,7 @@
 #include "LogIntoTheSystem.h"
 
 template<typename VALUE>
-void LogIntoTheSystem::CatchWrongValue(VALUE value)
+void System::CatchWrongValue(VALUE value)
 {
 	if (cin.fail())
 	{
@@ -11,7 +11,7 @@ void LogIntoTheSystem::CatchWrongValue(VALUE value)
 	}
 }
 
-void LogIntoTheSystem::Fillauthorizationfile()
+void System::Fillauthorizationfile()
 {
 	ifstream file;
 	file.open(USERS);
@@ -36,7 +36,7 @@ void LogIntoTheSystem::Fillauthorizationfile()
 	file.close();
 }
 
-LogIntoTheSystem::LogIntoTheSystem()
+System::System()
 {
 	this->size = 0;
 	try
@@ -58,7 +58,7 @@ LogIntoTheSystem::LogIntoTheSystem()
 	}
 }
 
-bool LogIntoTheSystem::LogInAsUser()
+bool System::LogInAsUser()
 {
 	string login;
 	string password;
@@ -92,7 +92,7 @@ bool LogIntoTheSystem::LogInAsUser()
 	return false;
 }
 
-vector<User*>::iterator LogIntoTheSystem::FindByLogin(string login)
+vector<User*>::iterator System::FindByLogin(string login)
 {
 	for (vector<User*>::iterator Iuser = users.begin(); Iuser != users.end(); Iuser++)
 	{
@@ -104,7 +104,7 @@ vector<User*>::iterator LogIntoTheSystem::FindByLogin(string login)
 	throw exception("Ïîëüçîâàòåëü íå íàéäåí. ");
 }
 
-void LogIntoTheSystem::Menu()
+void System::Menu()
 {
 	if ((*AuthorizedUser)->GetRole())
 	{
@@ -116,12 +116,12 @@ void LogIntoTheSystem::Menu()
 	}
 }
 
-vector<User*>::iterator LogIntoTheSystem::users_end()
+vector<User*>::iterator System::users_end()
 {
 	return users.end();
 }
 
-void LogIntoTheSystem::AdminMenu()
+void System::AdminMenu()
 {
 	int choice;
 	while (true)
@@ -183,7 +183,7 @@ void LogIntoTheSystem::AdminMenu()
 	}
 }  
 
-void LogIntoTheSystem::AddAccount(int choice)
+void System::AddAccount(int choice)
 {
 	char option;
 	string login;
@@ -227,7 +227,7 @@ void LogIntoTheSystem::AddAccount(int choice)
 	}
 }
 
-void LogIntoTheSystem::EditAccount()
+void System::EditAccount()
 {
 	string login;
 	string password;
@@ -291,7 +291,7 @@ void LogIntoTheSystem::EditAccount()
 	}
 }
 
-void LogIntoTheSystem::PrintAllAccounts()
+void System::PrintAllAccounts()
 {
 	cout << setw(40) << left << "ËÎÃÈÍ" << setw(40) << "ÏÀÐÎËÜ" << setw(40) << "ÐÎËÜ" << endl;
 	for (auto* user : users)
@@ -300,7 +300,7 @@ void LogIntoTheSystem::PrintAllAccounts()
 	}
 }
 
-void LogIntoTheSystem::DeleteAccount()
+void System::DeleteAccount()
 {
 	string Currentuser_login = (*AuthorizedUser)->GetLogin();
 	string login;

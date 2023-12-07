@@ -136,6 +136,8 @@
     <ClInclude Include="AllDependencies.h" />
     <ClInclude Include="FileException.h" />
     <ClInclude Include="LogIntoTheSystem.h" />
+    <ClInclude Include="Scholarship.h" />
+    <ClInclude Include="Students.h" />
     <ClInclude Include="Users.h" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 #include "LogIntoTheSystem.h"
 
 using namespace std;
-class LogIntoTheSystem;
+class System;
 
 class User
 {
@@ -19,7 +19,7 @@ public:
     string GetLogin();
     string GetPassword();
     virtual string GetStringRole();
-    void SetLogin(LogIntoTheSystem& log);
+    void SetLogin(System& log);
     void SetPassword();
     bool GetRole();
 
@@ -37,7 +37,7 @@ public:
         cout << "12.Выход из программы" << endl;
     }
 
-    virtual void Menu(LogIntoTheSystem* log)
+    virtual void Menu(System* log)
     {
         MenuOptions();
     }

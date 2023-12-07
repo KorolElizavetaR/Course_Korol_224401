@@ -5,7 +5,7 @@
 #include "Users.h"
 #include "FileException.h"
 
-class LogIntoTheSystem
+class System
 {
 	vector <User*> users;
 	vector<User*>::iterator AuthorizedUser;
@@ -17,7 +17,7 @@ class LogIntoTheSystem
 
 public:
 
-	LogIntoTheSystem();
+	System();
 
 	bool LogInAsUser();
 

@@ -29,7 +29,7 @@ string User::GetStringRole()
 	return "пользователь";
 }
 
-void User::SetLogin(LogIntoTheSystem& log)
+void User::SetLogin(System& log)
 {
     string login;
     bool repeat = 0;
