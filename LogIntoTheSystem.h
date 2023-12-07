@@ -11,30 +11,9 @@ class LogIntoTheSystem
 	vector<User*>::iterator AuthorizedUser;
 	int size;
 
-	void Fillauthorizationfile()
-	{
-		ifstream file;
-		file.open(USERS);
-		if (!file.is_open() || file.peek() == EOF)
-			throw FileException(USERS);
-
-		string login;
-		string password;
-		string role;
-		//Проверка на существование логина
-		//Проверка на корректность записи в строке
-		while (!file.eof())
-		{
-			file >> login >> password >> role;
-			if (role == "0")
-				users.push_back(new User(login, password));
-			else if (role == "1")
-				users.push_back(new Admin(login, password));
-			size++;
-		}
-
-		file.close();
-	}
+	void Fillauthorizationfile();
+	template<typename VALUE>
+	void CatchWrongValue(VALUE value);
 
 public:
 
@@ -46,15 +25,26 @@ public:
 
 	vector<User*>::iterator users_end();
 
-	void Menu()
+	void AdminMenu();
+
+	void UserMenu()
 	{
-		(*AuthorizedUser)->Menu(*this);
+		cout << "\tРедактирование учетных записей" << endl;
+		cout << "1.Просмотр учетных записей" << endl;
+		cout << "2.Добавление учетной записи" << endl;
+		cout << "3.Редактирование учетной записи" << endl;
+		cout << "4.Удаление учетной записи" << endl;
 	}
 
-	void PrintAllAccounts()
-	{
+	void Menu();
 
-	}
+	void PrintAllAccounts();
+
+	void AddAccount(int choice);
+
+	void EditAccount();
+
+	void DeleteAccount();
 };
 
 

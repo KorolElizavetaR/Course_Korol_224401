@@ -1,17 +1,12 @@
 #include "LogIntoTheSystem.h"
 
-Admin::Admin(string name, string password) :User(name, password)
+Admin::Admin():User()
 {
 	this->role = true;
 }
-
-void Admin::Menu_accounts()
+Admin::Admin(string name, string password):User(name, password)
 {
-    cout << "\tРедактирование учетных записей" << endl;
-    cout << "1.Просмотр учетных записей" << endl;
-    cout << "2.Добавление учетной записи" << endl;
-    cout << "3.Редактирование учетной записи" << endl;
-    cout << "4.Удаление учетной записи" << endl;
+	this->role = true;
 }
 
 string Admin::GetStringRole()

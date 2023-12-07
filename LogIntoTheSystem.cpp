@@ -1,5 +1,41 @@
 #include "LogIntoTheSystem.h"
 
+template<typename VALUE>
+void LogIntoTheSystem::CatchWrongValue(VALUE value)
+{
+	if (cin.fail())
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		throw exception("Неккоректный ввод.");
+	}
+}
+
+void LogIntoTheSystem::Fillauthorizationfile()
+{
+	ifstream file;
+	file.open(USERS);
+	if (!file.is_open() || file.peek() == EOF)
+		throw FileException(USERS);
+
+	string login;
+	string password;
+	string role;
+	//Проверка на существование логина
+	//Проверка на корректность записи в строке
+	while (!file.eof())
+	{
+		file >> login >> password >> role;
+		if (role == "0")
+			users.push_back(new User(login, password));
+		else if (role == "1")
+			users.push_back(new Admin(login, password));
+		size++;
+	}
+
+	file.close();
+}
+
 LogIntoTheSystem::LogIntoTheSystem()
 {
 	this->size = 0;
@@ -14,7 +50,7 @@ LogIntoTheSystem::LogIntoTheSystem()
 	}
 	if (LogInAsUser())
 	{
-		cout << "Вы вошли под логином " << (*AuthorizedUser)->GetLogin() << "под ролью " << (*AuthorizedUser)->GetStringRole();
+		cout << "Вы вошли под логином " << (*AuthorizedUser)->GetLogin() << " под ролью " << (*AuthorizedUser)->GetStringRole() << endl;
 	}
 	else
 	{
@@ -68,7 +104,243 @@ vector<User*>::iterator LogIntoTheSystem::FindByLogin(string login)
 	throw exception("Пользователь не найден. ");
 }
 
+void LogIntoTheSystem::Menu()
+{
+	if ((*AuthorizedUser)->GetRole())
+	{
+		AdminMenu();
+	}
+	else
+	{
+		UserMenu();
+	}
+}
+
 vector<User*>::iterator LogIntoTheSystem::users_end()
 {
 	return users.end();
+}
+
+void LogIntoTheSystem::AdminMenu()
+{
+	int choice;
+	while (true)
+	{
+		cout << "\tРабота с учетными записями" << endl;
+		cout << "1.Просмотр учетных записей" << endl;
+		cout << "2.Добавление учетной записи" << endl;
+		cout << "3.Редактирование учетной записи" << endl;
+		cout << "4.Удаление учетной записи" << endl << endl;
+		cout << "\tРабота с данными о студенческих стипендиях" << endl;
+		cout << "5.Просмотр списка студентов" << endl;
+		cout << "6.Добавление информации о студенте." << endl;
+		cout << "7.Редактирование информации о студенте и его стипендии." << endl;
+		cout << "8.Удаление студента из базы данных" << endl;
+		cout << "9.Общая информация по стипендиям." << endl;
+		cout << "10.Поиск информации о студенте по студенческому номеру." << endl;
+		cout << "11.Сортировка списка студентов по параметрам." << endl;
+		cout << "12.Заявки на получение/повышение стипендии" << endl << endl;
+		cout << "\tПрочее" << endl;
+		cout << "12.Выход из программы" << endl;
+		cout << "Ввод: ";
+		cin.ignore(cin.rdbuf()->in_avail());
+		cin >> noskipws >> choice;
+		try
+		{
+			switch (choice)
+			{
+			case 1:
+				PrintAllAccounts();
+				break;
+			case 2:
+				cout << "1. Добавить администратора" << endl;
+				cout << "2. Добавить пользователя" << endl;
+				cout << "3. Вернуться в главное меню." << endl;
+				cout << "Ввод: ";
+				cin.ignore(cin.rdbuf()->in_avail());
+				cin >> noskipws >> choice;
+				AddAccount(choice);
+				break;
+			case 3:
+				EditAccount();
+				break;
+			case 4:
+				DeleteAccount();
+				break;
+			case 12:
+				return;
+			default:
+				CatchWrongValue(choice);
+				cout << "Такой опции нет." << endl;
+			}
+		}
+		catch (exception& ex)
+		{
+			cout << ex.what() << endl;
+		}
+		system("pause");
+		system("cls");
+	}
+}  
+
+void LogIntoTheSystem::AddAccount(int choice)
+{
+	char option;
+	string login;
+	string password;
+	User* user;
+	switch (choice)
+	{
+	case 1:
+		user = new Admin();
+		break;
+	case 2:
+		user = new User();
+		break;
+	case 3:
+		return;
+	default:
+		CatchWrongValue(choice);
+		cout << "Ввиду неясности ответа переводим вас в главное меню";
+		return;
+	}
+	user->SetLogin(*this);
+	user->SetPassword();
+	cout << "Сохранить аккаунт?\n1.Да\n2.Нет" << endl;
+	cin.ignore(cin.rdbuf()->in_avail());
+	cin >> noskipws >> option;
+	switch (option)
+	{
+	case '1':
+		users.push_back(user);
+		++size;
+		cout << "Пользователь " << user->GetLogin() << " под ролью " << user->GetStringRole() << " был добавлен." << endl;
+		return;
+	case '2':
+		delete user;
+		return;
+	default:
+		CatchWrongValue(option);
+		delete user;
+		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
+		return;
+	}
+}
+
+void LogIntoTheSystem::EditAccount()
+{
+	string login;
+	string password;
+	int choice;
+	vector<User*>::iterator Current_User;
+	cout << "Введите логин аккаунта, информацию о котором нужно изменить:";
+	cin.ignore(cin.rdbuf()->in_avail());
+	cin >> noskipws >> login;
+	try
+	{
+		Current_User = FindByLogin(login);
+		cout << "Какую информацию требуется изменить?" << endl;
+		cout << "1.Логин\n2.Пароль\n3.Вернуться в главное меню.";
+		cin.ignore(cin.rdbuf()->in_avail());
+		cin >> noskipws >> choice;
+		switch (choice)
+		{
+		case 1:
+			(*Current_User)->SetLogin(*this);
+			break;
+		case 2:
+			password = (*Current_User)->GetPassword();
+			(*Current_User)->SetPassword();
+			break;
+		case 3:
+			cout << "Возврат в главное меню";
+			return;
+		default:
+			CatchWrongValue(choice);
+			return;
+		}
+	}
+	catch (exception& ex)
+	{
+		cout << "Ввиду неясности ответа переводим вас в главное меню";
+	}
+	cout << "Сохранить изменения?\n1.Да\n2.Нет" << endl;
+	int option;
+	cin.ignore(cin.rdbuf()->in_avail());
+	cin >> noskipws >> option;
+	switch (option)
+	{
+	case 1:
+		if (choice == 1)
+		{
+			cout << "Логин пользователя " << login << " сменен на " << (*Current_User)->GetLogin();
+		}
+		else
+		{
+			cout << "Пароль пользователя " << login << " сменен с " << password << " на " << (*Current_User)->GetPassword();
+		}
+		return;
+	case 2:
+		(*Current_User)->SetLoginWITHOUTRESTRICTION(login);
+		(*Current_User)->SetPasswordWITHOUTRESTRICTION(password);
+		return;
+	default:
+		CatchWrongValue(option);
+		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
+		return;
+	}
+}
+
+void LogIntoTheSystem::PrintAllAccounts()
+{
+	cout << setw(40) << left << "ЛОГИН" << setw(40) << "ПАРОЛЬ" << setw(40) << "РОЛЬ" << endl;
+	for (auto* user : users)
+	{
+		cout << *user << endl;
+	}
+}
+
+void LogIntoTheSystem::DeleteAccount()
+{
+	string Currentuser_login = (*AuthorizedUser)->GetLogin();
+	string login;
+	string password;
+	int choice;
+	vector<User*>::iterator Current_User;
+	cout << "Введите логин аккаунта, информацию о котором нужно удалить:";
+	cin.ignore(cin.rdbuf()->in_avail());
+	cin >> noskipws >> login;
+	if (login == (*AuthorizedUser)->GetLogin())
+	{
+		cout << "Вы не можете удалить свой аккаунт. Выход в главное меню.";
+		return;
+	}
+	try
+	{
+		Current_User = FindByLogin(login);
+		cout << "Удалить аккаунт " << login << "?\n1.Да\n2.Нет" << endl;
+		int option;
+		cin.ignore(cin.rdbuf()->in_avail());
+		cin >> noskipws >> option;
+		switch (option)
+		{
+		case 1:
+			users.erase(Current_User);
+			size--;
+			AuthorizedUser = FindByLogin(Currentuser_login);
+			cout << "Пользователь " << login << " удален.";
+			return;
+		case 2:
+			cout << "Возвращаемся в главное меню. ";
+			return;
+		default:
+			CatchWrongValue(option);
+			cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
+			return;
+		}
+	}
+	catch (exception& ex)
+	{
+		cout << ex.what() << ". Возврат в главное меню.";
+	}
 }

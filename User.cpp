@@ -37,7 +37,8 @@ void User::SetLogin(LogIntoTheSystem& log)
     {
         repeat = 0;
         cout << "Логин (не меньше семи символов)" << ":";
-        cin >> login;
+        cin.ignore(cin.rdbuf()->in_avail());
+        cin >> noskipws >> login;
         int size = login.size();
         if (size < 6)
         {
@@ -60,10 +61,16 @@ void User::SetLogin(LogIntoTheSystem& log)
             repeat = 1;
             continue;
         }
-        if (log.FindByLogin(login) != log.users_end())
+        try
         {
+            log.FindByLogin(login);
             cout << "Логин уже занят. Придумайте новый." << endl;
+            repeat = 1;
             continue;
+        }
+        catch (exception& ex)
+        {
+            // :)
         }
         if (!repeat)
         {
@@ -79,12 +86,29 @@ void User::SetPassword()
     while (true)
     {
         cout << "Пароль(не меньше 6 символов):";
-        cin >> password;
+        cin.ignore(cin.rdbuf()->in_avail());
+        cin >> noskipws >> password;
         if (password.size() < 6)
         {
             cout << "Пароль слишком короткий.Введите другой." << endl;;
             continue;
         }
         this->password = password;
+        return;
     }
+}
+
+bool User::GetRole()
+{
+    return this->role;
+}
+
+void User::SetLoginWITHOUTRESTRICTION(string login)
+{
+    this->login = login;
+}
+
+void User::SetPasswordWITHOUTRESTRICTION(string password)
+{
+    this->password = password;
 }
