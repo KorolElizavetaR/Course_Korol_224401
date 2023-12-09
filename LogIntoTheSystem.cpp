@@ -62,13 +62,29 @@ bool System::LogInAsUser()
 {
 	string login;
 	string password;
+	unsigned char p;
 	int attempts = 6;
 	while (--attempts != 0)
 	{
 		cout << "Введите логин: ";
 		cin >> login;
 		cout << "Введите пароль: ";
-		cin >> password;
+		while (true)
+		{
+			p = _getch();
+			if (p == 13) break;
+			if (p == '\b' && !password.empty())
+			{
+				password.erase(password.size() - 1);
+				cout << "\b \b";
+			}
+			if (isalnum((unsigned char)p))
+			{
+				cout << '*';
+				password += p;
+			}
+		}
+		cout << "\n";
 		try
 		{
 			vector<User*>::iterator Iuser;
@@ -344,3 +360,4 @@ void System::DeleteAccount()
 		cout << ex.what() << ". Возврат в главное меню.";
 	}
 }
+

@@ -27,6 +27,9 @@
     <ClCompile Include="Admin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Students.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogIntoTheSystem.h">
@@ -42,9 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Students.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scholarship.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

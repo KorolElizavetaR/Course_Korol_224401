@@ -130,13 +130,13 @@
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="LogIntoTheSystem.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Students.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllDependencies.h" />
     <ClInclude Include="FileException.h" />
     <ClInclude Include="LogIntoTheSystem.h" />
-    <ClInclude Include="Scholarship.h" />
     <ClInclude Include="Students.h" />
     <ClInclude Include="Users.h" />
   </ItemGroup>
