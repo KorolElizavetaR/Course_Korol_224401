@@ -1,6 +1,6 @@
 #pragma once
 #include "AllDependencies.h"
-#include "LogIntoTheSystem.h"
+#include "System.h"
 
 using namespace std;
 class System;

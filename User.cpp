@@ -1,4 +1,4 @@
-#include "LogIntoTheSystem.h"
+#include "System.h"
 
 User::User(string login, string password)
 {

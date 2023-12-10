@@ -2,7 +2,7 @@
 #define ID_LENGTH 6
 #define BASE_SCHOLARSHIP 125.90
 #include "AllDependencies.h"
-#include "LogIntoTheSystem.h"
+#include "System.h"
 
 class Scholarship
 {
@@ -53,7 +53,7 @@ class Scholarship
 			// 5. Олимпиадник
 			return 0.25;
 		case 6:
-			// 6. Защищенная научно - исследовательская работа
+			// 6. Защищенная научно-исследовательская работа
 			return 0.3;
 		case 7:
 			// 7. ЧАЭС жертвы
@@ -68,11 +68,15 @@ class Scholarship
 public:
 	void SetBenefit(int Benefit)
 	{
+		if (Benefit > 8 && averagegrade < 0)
+			throw exception("Некорректный ввод кода льготы.");
 		this->Benefit = Benefit;
 		RecountScholarship();
 	}
 	void SetAverageGrade(double averagegrade)
 	{
+		if (averagegrade > 10 && averagegrade <= 0)
+			throw exception("Некорректный ввод средней оценки.");
 		this->averagegrade = averagegrade;
 		RecountScholarship();
 	}
@@ -128,7 +132,7 @@ public:
 
 class Student
 {
-	Scholarship scholarship;
+	Scholarship *scholarship;
 	string Full_Name;
 	string GroupID;
 public:
@@ -136,10 +140,7 @@ public:
 
 	Student(string Full_Name);
 
-	Student()
-	{
-		Full_Name="";
-	}
+	Student();
 
 	void GenerateID();
 
@@ -147,44 +148,10 @@ public:
 
 	string GetID();
 
-	Scholarship GetAccessToScholarship()
+	Scholarship & GetAccessToScholarship()
 	{
-		return this->scholarship;
+		return *scholarship;
 	}
 
-	void SetFIO()
-	{
-		int count = 0;
-		string FIO;
-		while (true)
-		{
-			cout << "ФИО: ";
-			count = 0;
-			cin.ignore(cin.rdbuf()->in_avail());
-			getline(cin, FIO);
-			bool NumberInFio = 0;
-			for (int i = 0; i < FIO.size(); i++)
-			{
-				if (FIO[i] == ' ')
-				{
-					count++;
-					continue;
-				}
-				if (!((FIO[i] >= 'А' && FIO[i] <= 'Я') || (FIO[i] >= 'а' && FIO[i] <= 'я')))
-				{
-					cout << "В ФИО не могут содержаться цифры, латинские буквы или символы ." << endl << endl;
-					NumberInFio = 1;
-					break;
-				}
-			}
-			if (NumberInFio == 1)
-				continue;
-			if (count == 2)
-			{
-				this->Full_Name = FIO;
-				return;
-			}
-			cout << "Информация введена неверно." << endl << endl;
-		}
-	}
+	void SetFIO();
 };

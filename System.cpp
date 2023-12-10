@@ -1,4 +1,4 @@
-#include "LogIntoTheSystem.h"
+#include "System.h"
 
 template<typename VALUE>
 void System::CatchWrongValue(VALUE value)
@@ -119,6 +119,18 @@ vector<User*>::iterator System::FindByLogin(string login)
 	throw exception("Пользователь не найден. ");
 }
 
+vector <Student*>::iterator System::FindByStudentID(string ID)
+{
+	for (vector<Student*>::iterator Istudent = students.begin(); Istudent != students.end(); Istudent++)
+	{
+		if ((*Istudent)->GetID() == ID)
+		{
+			return Istudent;
+		}
+	}
+	throw exception("Студент не найден.");
+}
+
 void System::Menu()
 {
 	if ((*AuthorizedUser)->GetRole())
@@ -157,7 +169,7 @@ void System::AdminMenu()
 		cout << "11.Сортировка списка студентов по параметрам." << endl;
 		cout << "12.Заявки на получение/повышение стипендии" << endl << endl;
 		cout << "\tПрочее" << endl;
-		cout << "12.Выход из программы" << endl;
+		cout << "13.Выход из программы" << endl;
 		cout << "Ввод: ";
 		cin.ignore(cin.rdbuf()->in_avail());
 		cin >> noskipws >> choice;
@@ -192,15 +204,14 @@ void System::AdminMenu()
 			case 7:
 				cout << "Введите ID студента" << endl;
 				cin.ignore(cin.rdbuf()->in_avail());
-				cin >> noskipws >> choice;
-
-				cout << "1. Изменить ФИО" << endl;
-				cout << "2. Изменить средний балл" << endl;
-				cout << "3. Изменить льготу." << endl;
-				cout << "Ввод: ";
+				cin >> noskipws >> ID;
+				EditStudent(FindByStudentID(ID));
+				break;
+			case 8:
+				cout << "Введите ID студента" << endl;
 				cin.ignore(cin.rdbuf()->in_avail());
-				cin >> noskipws >> choice;
-				EditStudent(choice);
+				cin >> noskipws >> ID;
+				DeleteStudent(FindByStudentID(ID));
 				break;
 			case 12:
 				return;
@@ -382,19 +393,147 @@ void System::PrintAllStudents()
 {
 	for (auto student : students)
 	{
-		cout << "Имя студента:" << student.GetStudentFullName() << "\n\tID:" << student.GetID()
-			<< "\n\tТекущая стипендия:" << student.GetAccessToScholarship().GetScholarship()
-			<< "\n\tСредний балл:" << student.GetAccessToScholarship().GetAverageGrade()
-			<< "\n\tЛьгота:" << student.GetAccessToScholarship().GetBenefit() << endl;
+		cout << "Имя студента:" << student->GetStudentFullName() << "\n\tID:" << student->GetID()
+			<< "\n\tТекущая стипендия:" << student->GetAccessToScholarship().GetScholarship()
+			<< "\n\tСредний балл:" << student->GetAccessToScholarship().GetAverageGrade()
+			<< "\n\tЛьгота:" << student->GetAccessToScholarship().GetBenefit() << endl;
 	}
 }
 
 void System::AddStudent()
 {
-	Student st;
-	st.SetFIO();
-	st.GenerateID();
-	cout << "ID студента:" << st.GetID() << endl;
+	Student *st = new Student();
+	st->SetFIO();
+	cout << "ID студента:" << st->GetID() << endl;
 	cout << "Остальная информация добавляется в разделе редактирования студента.";
 	students.push_back(st);
+}
+
+void System::FillStudentsFromFile()
+{
+	string FullName;
+	string Name, Surname, LastName;
+	string GroupID;
+	double AverageGrade;
+	int Benefit;
+
+	ifstream file;
+	file.open(STUDENTS);
+	if (!file.is_open() || file.peek() == EOF)
+		throw FileException(STUDENTS);
+
+	while (!file.eof())
+	{
+		file >> Surname >> Name >> LastName >> GroupID >> AverageGrade >> Benefit;
+		FullName = Surname + " " + Name + " " + LastName;
+		students.push_back(new Student(FullName, GroupID, AverageGrade, Benefit));
+	}
+
+	file.close();
+}
+
+void System::DeleteStudent(vector <Student*>::iterator Istudent)
+{
+	string FIO = (*Istudent)->GetStudentFullName();
+	cout << "Вы уверены, что хотите удалить студента " << (*Istudent)->GetStudentFullName() << "?\n1.Да\n2.Нет" << endl;
+	int option;
+	cin.ignore(cin.rdbuf()->in_avail());
+	cin >> noskipws >> option;
+	switch (option)
+	{
+	case 1:
+		students.erase(Istudent); 
+		cout << "Студент " << FIO << " удален.";
+		return;
+	case 2:
+		cout << "Возвращаемся в главное меню. ";
+		return;
+	default:
+		CatchWrongValue(option);
+		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
+		return;
+	}
+}
+
+void System::EditStudent(vector <Student*>::iterator Istudent)
+{
+	int choice;
+	double averagegrade;
+	int benefit;
+	cout << "1. Изменить ФИО" << endl;
+	cout << "2. Изменить средний балл" << endl;
+	cout << "3. Изменить льготу." << endl;
+	cout << "Ввод: ";
+	cin.ignore(cin.rdbuf()->in_avail());
+	cin >> noskipws >> choice;
+	switch (choice)
+	{
+	case 1:
+		(*Istudent)->SetFIO();
+		cout << "ФИО студента " << (*Istudent)->GetID() << " изменены на " << (*Istudent)->GetStudentFullName();
+		return;
+	case 2:
+		while (true)
+		{
+			try
+			{
+				cout << "Средний балл:";
+				cin.ignore(cin.rdbuf()->in_avail());
+				cin >> noskipws >> averagegrade;
+				(*Istudent)->GetAccessToScholarship().SetAverageGrade(averagegrade);
+				break;
+			}
+			catch (exception& ex)
+			{
+				cout << ex.what() << endl;
+				continue;
+			}
+		}
+		cout << "Средний балл студента " << (*Istudent)->GetStudentFullName() << " изменен на " << (*Istudent)->GetAccessToScholarship().GetAverageGrade();
+		return;
+	case 3:
+		while (true)
+		{
+			try
+			{
+				cout << "Введите код льготы:";
+				cin.ignore(cin.rdbuf()->in_avail());
+				cin >> noskipws >> benefit;
+				(*Istudent)->GetAccessToScholarship().SetBenefit(benefit);
+				break;
+			}
+			catch (exception& ex)
+			{
+				cout << ex.what() << endl;
+				continue;
+			}
+		}
+		if (benefit == 0)
+		{
+			cout << "\nСтудент " << (*Istudent)->GetStudentFullName() << " был лишен льготы.";
+		}
+		else
+		{
+			cout << "\nСледующая льгота студента " << (*Istudent)->GetStudentFullName() << " была изменена/добавлена:" << (*Istudent)->GetAccessToScholarship().GetBenefit();
+		}
+		break;
+	default:
+		CatchWrongValue(choice);
+		cout << "Ввиду неясности ответа переводим вас в главное меню";
+		return;
+	}
+}
+
+void System::BenefitsInformation()
+{
+	cout << "Вопросы стипендиального обеспечения регулируются Постановлением Министерства образования от 31.10.2022 № 410 «О вопросах стипендиального обеспечения и осуществления других денежных выплат обучающимся»." << endl;
+	cout << "Социальная стипендия назначается лицу, если это лицо относится к одной из категорий:" << endl;
+	cout << "1) лица, имеющих детей в возрасте до восемнадцати лет;" << endl;
+	cout << "2) военнослужащие срочной военной службы, граждане, проходящие альтернативную службу, военнообязанные, призванные на военные (специальные) сборы, а также суворовцы и воспитанники воинских частей;\n" << endl;
+	cout << "3) инвалидов, кроме лиц, инвалидность которых наступила в результате противоправных действий;" << endl;
+	cout << "4) детей-сирот и детей, оставшихся без попечения родителей;" << endl;
+	cout << "5) именная стипендия лицу, достигшему высоких результатов в олимпиаде;" << endl;
+	cout << "6) Именная стипендия лицу, достигшему высоких результатов в научно-исследовательской деятельности;" << endl;
+	cout << "7) лиц, имеющих льготы в соответствии со статьями 18-23 Закона Республики Беларусь от 6 января 2009 года «О социальной защите граждан, пострадавших от катастрофы на Чернобыльской АЭС, других радиационных аварий»;" << endl;
+	cout << "8) лиц, находящихся в тяжелом материальном положении;" << endl;
 }
