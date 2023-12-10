@@ -4,9 +4,11 @@
 
 void main()
 {
-    setlocale(LC_ALL, "Rus");
+    setlocale(LC_ALL, "Ru");
+    setlocale(LC_CTYPE, "Ru");
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
+
     srand(time(NULL));
     try
     {

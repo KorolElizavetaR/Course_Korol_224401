@@ -14,22 +14,40 @@ class System
 
 	vector <Student> students;
 
-	int size;
 
 	void Fillauthorizationfile();
 
 	void FillStudentsFromFile()
 	{
+		string FullName;
 		string Name, Surname, LastName;
 		string GroupID;
 		double AverageGrade;
-		int 
+		int Benefit;
+
+		ifstream file;
+		file.open(STUDENTS);
+		if (!file.is_open() || file.peek() == EOF)
+			throw FileException(STUDENTS);
+
+		while (!file.eof())
+		{
+			file >> Surname >> Name >> LastName >> GroupID >> AverageGrade >> Benefit;
+			FullName = Surname + " " + Name + " " + LastName;
+			students.push_back(Student(FullName, GroupID, AverageGrade, Benefit));
+		}
+
+		file.close();
 	}
 
 	template<typename VALUE>
 	void CatchWrongValue(VALUE value);
 
 public:
+
+	void AddStudent();
+
+	void PrintAllStudents();
 
 	System();
 
@@ -43,11 +61,7 @@ public:
 
 	void UserMenu()
 	{
-		cout << "\tРедактирование учетных записей" << endl;
-		cout << "1.Просмотр учетных записей" << endl;
-		cout << "2.Добавление учетной записи" << endl;
-		cout << "3.Редактирование учетной записи" << endl;
-		cout << "4.Удаление учетной записи" << endl;
+		
 	}
 
 	void Menu();
@@ -59,12 +73,43 @@ public:
 	void EditAccount();
 
 	void DeleteAccount();
+
+	void EditStudent( int choice)
+	{
+		switch (choice)
+		{
+		case 1:
+			user = new Admin();
+			break;
+		case 2:
+			user = new User();
+			break;
+		case 3:
+			return;
+		default:
+			CatchWrongValue(choice);
+			cout << "Ввиду неясности ответа переводим вас в главное меню";
+			return;
+		}
+		user->SetLogin(*this);
+		user->SetPassword();
+		cout << "Сохранить аккаунт?\n1.Да\n2.Нет" << endl;
+		cin.ignore(cin.rdbuf()->in_avail());
+		cin >> noskipws >> option;
+		switch (option)
+		{
+		case '1':
+			users.push_back(user);
+			cout << "Пользователь " << user->GetLogin() << " под ролью " << user->GetStringRole() << " был добавлен." << endl;
+			return;
+		case '2':
+			delete user;
+			return;
+		default:
+			CatchWrongValue(option);
+			delete user;
+			cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
+			return;
+		}
+	}
 };
-
-
-
-//istream& operator>>(istream& is, User& item)
-//{
-//	is >> item.x >> item.y;
-//	return is;
-//}

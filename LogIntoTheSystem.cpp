@@ -30,7 +30,6 @@ void System::Fillauthorizationfile()
 			users.push_back(new User(login, password));
 		else if (role == "1")
 			users.push_back(new Admin(login, password));
-		size++;
 	}
 
 	file.close();
@@ -38,10 +37,10 @@ void System::Fillauthorizationfile()
 
 System::System()
 {
-	this->size = 0;
 	try
 	{
 		Fillauthorizationfile();
+		FillStudentsFromFile();
 	}
 	catch (FileException& ex)
 	{
@@ -140,6 +139,7 @@ vector<User*>::iterator System::users_end()
 void System::AdminMenu()
 {
 	int choice;
+	string ID;
 	while (true)
 	{
 		cout << "\tРабота с учетными записями" << endl;
@@ -182,6 +182,25 @@ void System::AdminMenu()
 				break;
 			case 4:
 				DeleteAccount();
+				break;
+			case 5:
+				PrintAllStudents();
+				break;
+			case 6:
+				AddStudent();
+				break;
+			case 7:
+				cout << "Введите ID студента" << endl;
+				cin.ignore(cin.rdbuf()->in_avail());
+				cin >> noskipws >> choice;
+
+				cout << "1. Изменить ФИО" << endl;
+				cout << "2. Изменить средний балл" << endl;
+				cout << "3. Изменить льготу." << endl;
+				cout << "Ввод: ";
+				cin.ignore(cin.rdbuf()->in_avail());
+				cin >> noskipws >> choice;
+				EditStudent(choice);
 				break;
 			case 12:
 				return;
@@ -229,7 +248,6 @@ void System::AddAccount(int choice)
 	{
 	case '1':
 		users.push_back(user);
-		++size;
 		cout << "Пользователь " << user->GetLogin() << " под ролью " << user->GetStringRole() << " был добавлен." << endl;
 		return;
 	case '2':
@@ -342,7 +360,6 @@ void System::DeleteAccount()
 		{
 		case 1:
 			users.erase(Current_User);
-			size--;
 			AuthorizedUser = FindByLogin(Currentuser_login);
 			cout << "Пользователь " << login << " удален.";
 			return;
@@ -361,3 +378,23 @@ void System::DeleteAccount()
 	}
 }
 
+void System::PrintAllStudents()
+{
+	for (auto student : students)
+	{
+		cout << "Имя студента:" << student.GetStudentFullName() << "\n\tID:" << student.GetID()
+			<< "\n\tТекущая стипендия:" << student.GetAccessToScholarship().GetScholarship()
+			<< "\n\tСредний балл:" << student.GetAccessToScholarship().GetAverageGrade()
+			<< "\n\tЛьгота:" << student.GetAccessToScholarship().GetBenefit() << endl;
+	}
+}
+
+void System::AddStudent()
+{
+	Student st;
+	st.SetFIO();
+	st.GenerateID();
+	cout << "ID студента:" << st.GetID() << endl;
+	cout << "Остальная информация добавляется в разделе редактирования студента.";
+	students.push_back(st);
+}

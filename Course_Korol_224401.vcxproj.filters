@@ -30,6 +30,9 @@
     <ClCompile Include="Students.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scholarship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LogIntoTheSystem.h">
