@@ -79,4 +79,3 @@ void Student::SetFIO()
 		cout << "Информация введена неверно." << endl << endl;
 	}
 }
-

@@ -57,7 +57,7 @@ System::System()
 	catch (FileException& ex)
 	{
 		cout << ex.what() << ex.GetFileName();
-		//EmergencyAdminFile(); создать админа
+		AddAccount(1);
 	}
 	if (LogInAsUser())
 	{
@@ -232,6 +232,7 @@ void System::AdminMenu()
 				cin.ignore(cin.rdbuf()->in_avail());
 				cin >> noskipws >> ID;
 				PrintStudent(FindByStudentID(ID));
+				break;
 			case 11:
 				SortingMenu();
 				break;
@@ -666,4 +667,55 @@ void System::ReWriteStudentsfile()
 		  " " << students[size - 1]->GetAccessToScholarship().GetBenefitCode();
 
 	file.close();
+}
+
+void System::UserMenu()
+{
+	int choice;
+	string ID;
+	while (true)
+	{
+		cout << "1.Изменить пароль" << endl;
+		cout << "2.Просмотр списка студентов" << endl;
+		cout << "3.Общая информация по стипендиям." << endl;
+		cout << "4.Поиск информации о студенте по студенческому номеру." << endl;
+		cout << "5.Выход из программы" << endl;
+		cout << "Ввод: ";
+		cin.ignore(cin.rdbuf()->in_avail());
+		cin >> noskipws >> choice;
+		try
+		{
+			switch (choice)
+			{
+			case 1:
+				(*AuthorizedUser)->SetPassword();
+				break;
+			case 2:
+				PrintAllStudents();
+				break;
+			case 3:
+				BenefitsInformation();
+				break;
+			case 4:
+				cout << "Введите ID студента" << endl;
+				cin.ignore(cin.rdbuf()->in_avail());
+				cin >> noskipws >> ID;
+				PrintStudent(FindByStudentID(ID));
+				break;
+			case 5:
+				ReWriteStudentsfile();
+				ReWriteauthorizationfile();
+				return;
+			default:
+				CatchWrongValue(choice);
+				cout << "Такой опции нет." << endl;
+			}
+		}
+		catch (exception& ex)
+		{
+			cout << ex.what() << endl;
+		}
+		system("pause");
+		system("cls");
+	}
 }

@@ -44,10 +44,7 @@ public:
 
 	void AdminMenu();
 
-	void UserMenu()
-	{
-
-	}
+	void UserMenu();
 
 	void Menu();
 
