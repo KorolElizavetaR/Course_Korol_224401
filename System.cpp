@@ -1,4 +1,5 @@
 #include "System.h"
+#define CAEASAR_CIPHER 3
 
 template<typename VALUE>
 void System::CatchWrongValue(VALUE value)
@@ -9,6 +10,16 @@ void System::CatchWrongValue(VALUE value)
 		cin.ignore(1000, '\n');
 		throw exception("Неккоректный ввод.");
 	}
+}
+
+string System::PasswordDecipher(string password, int CIPHERCODE)
+{
+	int size = password.size();
+	for (int i = 0; i < size; i++)
+	{
+		password[i] += CIPHERCODE;
+	}
+	return password;
 }
 
 void System::Fillauthorizationfile()
@@ -26,6 +37,7 @@ void System::Fillauthorizationfile()
 	while (!file.eof())
 	{
 		file >> login >> password >> role;
+		password = PasswordDecipher(password, CAEASAR_CIPHER);
 		if (role == "0")
 			users.push_back(new User(login, password));
 		else if (role == "1")
@@ -167,9 +179,8 @@ void System::AdminMenu()
 		cout << "9.Общая информация по стипендиям." << endl;
 		cout << "10.Поиск информации о студенте по студенческому номеру." << endl;
 		cout << "11.Сортировка списка студентов по параметрам." << endl;
-		cout << "12.Заявки на получение/повышение стипендии" << endl << endl;
 		cout << "\tПрочее" << endl;
-		cout << "13.Выход из программы" << endl;
+		cout << "12.Выход из программы" << endl;
 		cout << "Ввод: ";
 		cin.ignore(cin.rdbuf()->in_avail());
 		cin >> noskipws >> choice;
@@ -213,7 +224,20 @@ void System::AdminMenu()
 				cin >> noskipws >> ID;
 				DeleteStudent(FindByStudentID(ID));
 				break;
+			case 9:
+				BenefitsInformation();
+				break;
+			case 10:
+				cout << "Введите ID студента" << endl;
+				cin.ignore(cin.rdbuf()->in_avail());
+				cin >> noskipws >> ID;
+				PrintStudent(FindByStudentID(ID));
+			case 11:
+				SortingMenu();
+				break;
 			case 12:
+				ReWriteStudentsfile();
+				ReWriteauthorizationfile();
 				return;
 			default:
 				CatchWrongValue(choice);
@@ -389,14 +413,23 @@ void System::DeleteAccount()
 	}
 }
 
+void System::PrintStudent(vector<Student*>::iterator student)
+{
+	cout << "Имя студента:" << (*student)->GetStudentFullName() << "\n\tID:" << (*student)->GetID()
+		<< "\n\tТекущая стипендия:" << (*student)->GetAccessToScholarship().GetScholarship()
+		<< "\n\tСредний балл:" << (*student)->GetAccessToScholarship().GetAverageGrade()
+		<< "\n\tЛьгота:" << (*student)->GetAccessToScholarship().GetBenefit() << endl;
+}
+
 void System::PrintAllStudents()
 {
-	for (auto student : students)
+	for (auto Istudent = students.begin(); Istudent != students.end(); Istudent++)
 	{
-		cout << "Имя студента:" << student->GetStudentFullName() << "\n\tID:" << student->GetID()
+		PrintStudent(Istudent);
+		/*cout << "Имя студента:" << student->GetStudentFullName() << "\n\tID:" << student->GetID()
 			<< "\n\tТекущая стипендия:" << student->GetAccessToScholarship().GetScholarship()
 			<< "\n\tСредний балл:" << student->GetAccessToScholarship().GetAverageGrade()
-			<< "\n\tЛьгота:" << student->GetAccessToScholarship().GetBenefit() << endl;
+			<< "\n\tЛьгота:" << student->GetAccessToScholarship().GetBenefit() << endl;*/
 	}
 }
 
@@ -463,6 +496,7 @@ void System::EditStudent(vector <Student*>::iterator Istudent)
 	cout << "1. Изменить ФИО" << endl;
 	cout << "2. Изменить средний балл" << endl;
 	cout << "3. Изменить льготу." << endl;
+	cout << "4. В главное меню." << endl;
 	cout << "Ввод: ";
 	cin.ignore(cin.rdbuf()->in_avail());
 	cin >> noskipws >> choice;
@@ -536,4 +570,100 @@ void System::BenefitsInformation()
 	cout << "6) Именная стипендия лицу, достигшему высоких результатов в научно-исследовательской деятельности;" << endl;
 	cout << "7) лиц, имеющих льготы в соответствии со статьями 18-23 Закона Республики Беларусь от 6 января 2009 года «О социальной защите граждан, пострадавших от катастрофы на Чернобыльской АЭС, других радиационных аварий»;" << endl;
 	cout << "8) лиц, находящихся в тяжелом материальном положении;" << endl;
+}
+
+void System::SortingMenu()
+{
+	int choice;
+	cout << "1. Сортировка по ФИО" << endl;
+	cout << "2. Сортировка по среднему баллу" << endl;
+	cout << "3. Выход." << endl;
+	cout << "Ввод: ";
+		cin.ignore(cin.rdbuf()->in_avail());
+	cin >> noskipws >> choice;
+	switch (choice)
+	{
+	case 1:
+		SortByFIO();
+		break;
+	case 2:
+		SortByAverageGrade();
+		break;
+	case 3:
+		return;
+	default:
+		CatchWrongValue(choice);
+		cout << "Ввиду неясности ответа переводим вас в главное меню";
+		return;
+	}
+	PrintAllStudents();
+}
+
+void System::SortByAverageGrade()
+{
+	int size = students.size();
+	int min;
+	for (int i = 0; i < size; i++)
+	{
+		min = i;
+		for (int j = i + 1; j < size; j++)
+			if (students[j]->GetAccessToScholarship().GetAverageGrade() < students[min]->GetAccessToScholarship().GetAverageGrade())
+				min = j;
+		swap(students[i], students[min]);
+	}
+}
+
+void System::SortByFIO()
+{
+	int size = students.size();
+	int min;
+	for (int i = 0; i < size; i++)
+	{
+		min = i;
+		for (int j = i + 1; j < size; j++)
+			if (students[j]->GetStudentFullName() < students[min]->GetStudentFullName())
+				min = j;
+		swap(students[i], students[min]);
+	}
+}
+
+void System::ReWriteauthorizationfile()
+{
+	string password;
+	ofstream file;
+	file.open(USERS);
+	if (!file.is_open())
+		throw FileException(USERS);
+
+	int size = users.size();
+
+	for (int i = 0; i < size - 1; i++)
+	{
+		password = PasswordDecipher(users[i]->GetPassword(), (CAEASAR_CIPHER * (-1)));
+		file << users[i]->GetLogin() << " " << password << " " << users[i]->GetRole() << endl;
+	}
+	password = PasswordDecipher(users[size - 1]->GetPassword(), (CAEASAR_CIPHER * (-1)));
+	file << users[size - 1]->GetLogin() << " " << password << " " << users[size - 1]->GetRole();
+
+	file.close();
+}
+
+void System::ReWriteStudentsfile()
+{
+	ofstream file;
+	file.open(STUDENTS);
+	if (!file.is_open())
+		throw FileException(STUDENTS);
+
+	int size = students.size();
+
+	for (int i = 0; i < size - 1; i++)
+	{
+		file << students[i]->GetStudentFullName() << " " << students[i]->GetID() << " " << students[i]->GetAccessToScholarship().GetAverageGrade() <<
+			" " << students[i]->GetAccessToScholarship().GetBenefitCode() << endl;
+	}
+	file << students[size - 1]->GetStudentFullName() << " " << students[size - 1]->GetID() << " " << students[size - 1]->GetAccessToScholarship().GetAverageGrade() << 
+		  " " << students[size - 1]->GetAccessToScholarship().GetBenefitCode();
+
+	file.close();
 }

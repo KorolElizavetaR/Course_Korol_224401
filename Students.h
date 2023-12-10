@@ -66,6 +66,10 @@ class Scholarship
 		}
 	}
 public:
+	int GetBenefitCode()
+	{
+		return this->Benefit;
+	}
 	void SetBenefit(int Benefit)
 	{
 		if (Benefit > 8 && averagegrade < 0)

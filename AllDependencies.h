@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iomanip>
 #include <conio.h>
+#include <algorithm>
 
 const int color = system("color F0");
 

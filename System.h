@@ -1,6 +1,7 @@
 #pragma once
 #define USERS "Users.txt"
 #define STUDENTS "Students.txt"
+#define BENEFITS "Benefits.txt"
 
 #include "AllDependencies.h"
 #include "Users.h"
@@ -14,6 +15,8 @@ class System
 
 	vector <Student*> students;
 
+
+	string PasswordDecipher(string password , int CIPHERCODE);
 
 	void Fillauthorizationfile();
 
@@ -56,7 +59,14 @@ public:
 
 	void DeleteAccount();
 
+	void PrintStudent(vector<Student*>::iterator student);
+
 	void EditStudent(vector <Student*>::iterator Istudent);
 
 	void BenefitsInformation();
+	void SortingMenu();
+	void SortByAverageGrade();
+	void SortByFIO();
+	void ReWriteauthorizationfile();
+	void ReWriteStudentsfile();
 };
