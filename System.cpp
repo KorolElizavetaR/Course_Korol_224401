@@ -1,17 +1,6 @@
 #include "System.h"
 #define CAEASAR_CIPHER 3
 
-template<typename VALUE>
-void System::CatchWrongValue(VALUE value)
-{
-	if (cin.fail())
-	{
-		cin.clear();
-		cin.ignore(1000, '\n');
-		throw exception("Неккоректный ввод.");
-	}
-}
-
 string System::PasswordDecipher(string password, int CIPHERCODE)
 {
 	int size = password.size();
@@ -241,7 +230,7 @@ void System::AdminMenu()
 				ReWriteauthorizationfile();
 				return;
 			default:
-				CatchWrongValue(choice);
+				WrongValue::CatchWrongValue(choice);
 				cout << "Такой опции нет." << endl;
 			}
 		}
@@ -271,7 +260,7 @@ void System::AddAccount(int choice)
 	case 3:
 		return;
 	default:
-		CatchWrongValue(choice);
+		WrongValue::CatchWrongValue(choice);
 		cout << "Ввиду неясности ответа переводим вас в главное меню";
 		return;
 	}
@@ -290,7 +279,7 @@ void System::AddAccount(int choice)
 		delete user;
 		return;
 	default:
-		CatchWrongValue(option);
+		WrongValue::CatchWrongValue(option);
 		delete user;
 		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
 		return;
@@ -326,7 +315,7 @@ void System::EditAccount()
 			cout << "Возврат в главное меню";
 			return;
 		default:
-			CatchWrongValue(choice);
+			WrongValue::CatchWrongValue(choice);
 			return;
 		}
 	}
@@ -355,7 +344,7 @@ void System::EditAccount()
 		(*Current_User)->SetPasswordWITHOUTRESTRICTION(password);
 		return;
 	default:
-		CatchWrongValue(option);
+		WrongValue::CatchWrongValue(option);
 		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
 		return;
 	}
@@ -403,7 +392,7 @@ void System::DeleteAccount()
 			cout << "Возвращаемся в главное меню. ";
 			return;
 		default:
-			CatchWrongValue(option);
+			WrongValue::CatchWrongValue(option);
 			cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
 			return;
 		}
@@ -483,7 +472,7 @@ void System::DeleteStudent(vector <Student*>::iterator Istudent)
 		cout << "Возвращаемся в главное меню. ";
 		return;
 	default:
-		CatchWrongValue(option);
+		WrongValue::CatchWrongValue(option);
 		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
 		return;
 	}
@@ -553,7 +542,7 @@ void System::EditStudent(vector <Student*>::iterator Istudent)
 		}
 		break;
 	default:
-		CatchWrongValue(choice);
+		WrongValue::CatchWrongValue(choice);
 		cout << "Ввиду неясности ответа переводим вас в главное меню";
 		return;
 	}
@@ -593,7 +582,7 @@ void System::SortingMenu()
 	case 3:
 		return;
 	default:
-		CatchWrongValue(choice);
+		WrongValue::CatchWrongValue(choice);
 		cout << "Ввиду неясности ответа переводим вас в главное меню";
 		return;
 	}
@@ -707,7 +696,7 @@ void System::UserMenu()
 				ReWriteauthorizationfile();
 				return;
 			default:
-				CatchWrongValue(choice);
+				WrongValue::CatchWrongValue(choice);
 				cout << "Такой опции нет." << endl;
 			}
 		}

@@ -79,3 +79,8 @@ void Student::SetFIO()
 		cout << "Информация введена неверно." << endl << endl;
 	}
 }
+
+Scholarship& Student::GetAccessToScholarship()
+{
+	return *scholarship;
+}

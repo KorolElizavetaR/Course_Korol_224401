@@ -26,21 +26,6 @@ public:
     void SetLoginWITHOUTRESTRICTION(string login);
 
     void SetPasswordWITHOUTRESTRICTION(string password);
-
-    void MenuOptions()
-    {
-        cout << "\tРабота с данными о студенческих стипендиях" << endl;
-        cout << "1.Общая информация по стипендиям." << endl;
-        cout << "2.Поиск информации о студенте по студенческому номеру." << endl;
-        cout << "3.Оставить заявку на получение/повышение стипендии." << endl << endl;
-        cout << "\tПрочее" << endl; 
-        cout << "12.Выход из программы" << endl;
-    }
-
-    virtual void Menu(System* log)
-    {
-        MenuOptions();
-    }
 };
 
 class Admin : public User

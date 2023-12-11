@@ -22,9 +22,6 @@ class System
 
 	void FillStudentsFromFile();
 
-	template<typename VALUE>
-	void CatchWrongValue(VALUE value);
-
 public:
 	vector <Student*>::iterator FindByStudentID(string ID);
 
