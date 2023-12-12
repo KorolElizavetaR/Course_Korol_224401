@@ -77,3 +77,52 @@ void Scholarship::SetAverageGrade(double averagegrade)
 	this->averagegrade = averagegrade;
 	RecountScholarship();
 }
+
+void Scholarship::RecountScholarship()
+{
+	scholarship = BASE_SCHOLARSHIP * (1 + GetPersantageByGrade(averagegrade) + GetPersantageOfBenefit(Benefit));
+}
+Scholarship::Scholarship()
+{
+	scholarship = BASE_SCHOLARSHIP;
+	averagegrade = 0;
+	Benefit = 0;
+}
+Scholarship::Scholarship(double average_grade, double benefit)
+{
+	scholarship = BASE_SCHOLARSHIP * (1 + GetPersantageByGrade(average_grade) + GetPersantageOfBenefit(benefit));
+}
+double Scholarship::GetScholarship()
+{
+	return this->scholarship;
+}
+double Scholarship::GetAverageGrade()
+{
+	return this->averagegrade;
+}
+string Scholarship::GetBenefit()
+{
+	switch (Benefit)
+	{
+	case 0:
+		return "Льготы нет";
+	case 1:
+		return "Студент с ребенком";
+	case 2:
+		return "Военник";
+	case 3:
+		return "Инвалид";
+	case 4:
+		return "Сирота";
+	case 5:
+		return "Олимпиадник";
+	case 6:
+		return "Защищенная научно - исследовательская работа";
+	case 7:
+		return "ЧАЭС жертвы";
+	case 8:
+		return "Малоимущий студент";
+	default:
+		throw exception("Такого кода льготы нет.");
+	}
+}

@@ -66,6 +66,7 @@ bool System::LogInAsUser()
 	int attempts = 6;
 	while (--attempts != 0)
 	{
+		password = "";
 		cout << "Введите логин: ";
 		cin >> login;
 		cout << "Введите пароль: ";
@@ -513,7 +514,7 @@ void System::EditStudent(vector <Student*>::iterator Istudent)
 				continue;
 			}
 		}
-		cout << "Средний балл студента " << (*Istudent)->GetStudentFullName() << " изменен на " << (*Istudent)->GetAccessToScholarship().GetAverageGrade();
+		cout << "Средний балл студента " << (*Istudent)->GetStudentFullName() << " изменен на " << (*Istudent)->GetAccessToScholarship().GetAverageGrade() << endl;
 		return;
 	case 3:
 		while (true)
@@ -534,11 +535,11 @@ void System::EditStudent(vector <Student*>::iterator Istudent)
 		}
 		if (benefit == 0)
 		{
-			cout << "\nСтудент " << (*Istudent)->GetStudentFullName() << " был лишен льготы.";
+			cout << "\nСтудент " << (*Istudent)->GetStudentFullName() << " был лишен льготы." << endl;
 		}
 		else
 		{
-			cout << "\nСледующая льгота студента " << (*Istudent)->GetStudentFullName() << " была изменена/добавлена:" << (*Istudent)->GetAccessToScholarship().GetBenefit();
+			cout << "\nСледующая льгота студента " << (*Istudent)->GetStudentFullName() << " была изменена/добавлена:" << (*Istudent)->GetAccessToScholarship().GetBenefit() << endl;
 		}
 		break;
 	default:

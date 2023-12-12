@@ -34,8 +34,6 @@ public:
     Admin();
     Admin(string name, string password);
 
-    void Menu_accounts();
-
     string GetStringRole() override;
 };
 
