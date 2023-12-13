@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <conio.h>
 #include <algorithm>
+#include <math.h> 
 
 const int color = system("color F0");
 

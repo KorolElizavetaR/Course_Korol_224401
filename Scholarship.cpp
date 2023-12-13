@@ -64,6 +64,8 @@ int Scholarship::GetBenefitCode()
 
 void Scholarship::SetBenefit(int Benefit)
 {
+	
+	WrongValue::CatchWrongValue(Benefit);
 	if (Benefit > 8 && averagegrade < 0)
 		throw exception("Некорректный ввод кода льготы.");
 	this->Benefit = Benefit;
@@ -94,7 +96,7 @@ Scholarship::Scholarship(double average_grade, double benefit)
 }
 double Scholarship::GetScholarship()
 {
-	return this->scholarship;
+	return floor(this->scholarship*10)/10;
 }
 double Scholarship::GetAverageGrade()
 {

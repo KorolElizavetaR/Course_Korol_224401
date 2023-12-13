@@ -203,22 +203,22 @@ void System::AdminMenu()
 				AddStudent();
 				break;
 			case 7:
-				cout << "Введите ID студента" << endl;
+				cout << "Введите ID студента:";
 				cin.ignore(cin.rdbuf()->in_avail());
-				cin >> noskipws >> ID;
+				cin >> ID;
 				EditStudent(FindByStudentID(ID));
 				break;
 			case 8:
-				cout << "Введите ID студента" << endl;
+				cout << "Введите ID студента: ";
 				cin.ignore(cin.rdbuf()->in_avail());
-				cin >> noskipws >> ID;
+				cin >> ID;
 				DeleteStudent(FindByStudentID(ID));
 				break;
 			case 9:
 				BenefitsInformation();
 				break;
 			case 10:
-				cout << "Введите ID студента" << endl;
+				cout << "Введите ID студента: ";
 				cin.ignore(cin.rdbuf()->in_avail());
 				cin >> noskipws >> ID;
 				PrintStudent(FindByStudentID(ID));
@@ -300,7 +300,7 @@ void System::EditAccount()
 	{
 		Current_User = FindByLogin(login);
 		cout << "Какую информацию требуется изменить?" << endl;
-		cout << "1.Логин\n2.Пароль\n3.Вернуться в главное меню.";
+		cout << "1.Логин\n2.Пароль\n3.Вернуться в главное меню.\n\tВвод: ";
 		cin.ignore(cin.rdbuf()->in_avail());
 		cin >> noskipws >> choice;
 		switch (choice)
@@ -333,11 +333,11 @@ void System::EditAccount()
 	case 1:
 		if (choice == 1)
 		{
-			cout << "Логин пользователя " << login << " сменен на " << (*Current_User)->GetLogin();
+			cout << "Логин пользователя " << login << " сменен на " << (*Current_User)->GetLogin() << endl;
 		}
 		else
 		{
-			cout << "Пароль пользователя " << login << " сменен с " << password << " на " << (*Current_User)->GetPassword();
+			cout << "Пароль пользователя " << login << " сменен с " << password << " на " << (*Current_User)->GetPassword() << endl;
 		}
 		return;
 	case 2:
@@ -346,7 +346,7 @@ void System::EditAccount()
 		return;
 	default:
 		WrongValue::CatchWrongValue(option);
-		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
+		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню." << endl;
 		return;
 	}
 }
@@ -484,7 +484,7 @@ void System::EditStudent(vector <Student*>::iterator Istudent)
 	int choice;
 	double averagegrade;
 	int benefit;
-	cout << "1. Изменить ФИО" << endl;
+	cout << "\n1. Изменить ФИО" << endl;
 	cout << "2. Изменить средний балл" << endl;
 	cout << "3. Изменить льготу." << endl;
 	cout << "4. В главное меню." << endl;
@@ -495,7 +495,7 @@ void System::EditStudent(vector <Student*>::iterator Istudent)
 	{
 	case 1:
 		(*Istudent)->SetFIO();
-		cout << "ФИО студента " << (*Istudent)->GetID() << " изменены на " << (*Istudent)->GetStudentFullName();
+		cout << "ФИО студента " << (*Istudent)->GetID() << " изменены на " << (*Istudent)->GetStudentFullName() << endl;
 		return;
 	case 2:
 		while (true)
@@ -544,7 +544,7 @@ void System::EditStudent(vector <Student*>::iterator Istudent)
 		break;
 	default:
 		WrongValue::CatchWrongValue(choice);
-		cout << "Ввиду неясности ответа переводим вас в главное меню";
+		cout << "Ввиду неясности ответа переводим вас в главное меню" << endl;
 		return;
 	}
 }
