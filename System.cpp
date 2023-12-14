@@ -28,9 +28,9 @@ void System::Fillauthorizationfile()
 		file >> login >> password >> role;
 		password = PasswordDecipher(password, CAEASAR_CIPHER);
 		if (role == "0")
-			users.push_back(new User(login, password));
+			users.push_back(shared_ptr<User> (new User(login, password)));
 		else if (role == "1")
-			users.push_back(new Admin(login, password));
+			users.push_back(shared_ptr<User>(new Admin(login, password)));
 	}
 
 	file.close();
@@ -88,7 +88,7 @@ bool System::LogInAsUser()
 		cout << "\n";
 		try
 		{
-			vector<User*>::iterator Iuser;
+			vector<shared_ptr<User>>::iterator Iuser;
 			Iuser = FindByLogin(login);
 			if ((*Iuser)->GetPassword() == password)
 			{
@@ -109,9 +109,9 @@ bool System::LogInAsUser()
 	return false;
 }
 
-vector<User*>::iterator System::FindByLogin(string login)
+vector<shared_ptr<User>>::iterator System::FindByLogin(string login)
 {
-	for (vector<User*>::iterator Iuser = users.begin(); Iuser != users.end(); Iuser++)
+	for (vector<shared_ptr<User>>::iterator Iuser = users.begin(); Iuser != users.end(); Iuser++)
 	{
 		if ((*Iuser)->GetLogin() == login)
 		{
@@ -145,7 +145,7 @@ void System::Menu()
 	}
 }
 
-vector<User*>::iterator System::users_end()
+vector<shared_ptr<User>>::iterator System::users_end()
 {
 	return users.end();
 }
@@ -229,6 +229,7 @@ void System::AdminMenu()
 			case 12:
 				ReWriteStudentsfile();
 				ReWriteauthorizationfile();
+				ScholarshipReportFILE();
 				return;
 			default:
 				WrongValue::CatchWrongValue(choice);
@@ -249,14 +250,14 @@ void System::AddAccount(int choice)
 	char option;
 	string login;
 	string password;
-	User* user;
+	shared_ptr<User> user;
 	switch (choice)
 	{
 	case 1:
-		user = new Admin();
+		user = shared_ptr<User> (new Admin());
 		break;
 	case 2:
-		user = new User();
+		user = shared_ptr<User> (new User());
 		break;
 	case 3:
 		return;
@@ -277,11 +278,9 @@ void System::AddAccount(int choice)
 		cout << "Пользователь " << user->GetLogin() << " под ролью " << user->GetStringRole() << " был добавлен." << endl;
 		return;
 	case '2':
-		delete user;
 		return;
 	default:
 		WrongValue::CatchWrongValue(option);
-		delete user;
 		cout << "Ввиду неясности ответа изменения не сохранились. Перенаправление в главное меню.";
 		return;
 	}
@@ -292,7 +291,7 @@ void System::EditAccount()
 	string login;
 	string password;
 	int choice;
-	vector<User*>::iterator Current_User;
+	vector<shared_ptr<User>>::iterator Current_User;
 	cout << "Введите логин аккаунта, информацию о котором нужно изменить:";
 	cin.ignore(cin.rdbuf()->in_avail());
 	cin >> noskipws >> login;
@@ -322,7 +321,8 @@ void System::EditAccount()
 	}
 	catch (exception& ex)
 	{
-		cout << "Ввиду неясности ответа переводим вас в главное меню";
+		cout << "Логин не найден." << endl;
+		return;
 	}
 	cout << "Сохранить изменения?\n1.Да\n2.Нет" << endl;
 	int option;
@@ -354,7 +354,7 @@ void System::EditAccount()
 void System::PrintAllAccounts()
 {
 	cout << setw(40) << left << "ЛОГИН" << setw(40) << "ПАРОЛЬ" << setw(40) << "РОЛЬ" << endl;
-	for (auto* user : users)
+	for (shared_ptr<User> user : users)
 	{
 		cout << *user << endl;
 	}
@@ -366,7 +366,7 @@ void System::DeleteAccount()
 	string login;
 	string password;
 	int choice;
-	vector<User*>::iterator Current_User;
+	vector<shared_ptr<User>>::iterator Current_User;
 	cout << "Введите логин аккаунта, информацию о котором нужно удалить:";
 	cin.ignore(cin.rdbuf()->in_avail());
 	cin >> noskipws >> login;
@@ -708,4 +708,24 @@ void System::UserMenu()
 		system("pause");
 		system("cls");
 	}
+}
+
+void System::ScholarshipReportFILE()
+{
+	string password;
+
+	ofstream file;
+	file.open(REPORT);
+	if (!file.is_open())
+		throw FileException(REPORT);
+
+	int size = users.size();
+
+	for (int i = 0; i < size - 1; i++)
+	{
+		file << students[i]->GetStudentFullName() << ": " << students[i]->GetAccessToScholarship().GetScholarship() << " р." << endl;
+	}
+	file << students[size-1]->GetStudentFullName() << ": " << students[size-1]->GetAccessToScholarship().GetScholarship() << " р.";
+
+	file.close();
 }

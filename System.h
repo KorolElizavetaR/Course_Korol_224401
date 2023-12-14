@@ -1,7 +1,7 @@
 #pragma once
 #define USERS "Users.txt"
 #define STUDENTS "Students.txt"
-#define BENEFITS "Benefits.txt"
+#define REPORT "ScolarshipReport.txt"
 
 #include "AllDependencies.h"
 #include "Users.h"
@@ -10,8 +10,8 @@
 
 class System
 {
-	vector <User*> users;
-	vector<User*>::iterator AuthorizedUser;
+	vector <shared_ptr<User>> users;
+	vector<shared_ptr<User>>::iterator AuthorizedUser;
 
 	vector <Student*> students;
 
@@ -21,6 +21,8 @@ class System
 	void Fillauthorizationfile();
 
 	void FillStudentsFromFile();
+
+	void ScholarshipReportFILE();
 
 public:
 	vector <Student*>::iterator FindByStudentID(string ID);
@@ -33,11 +35,11 @@ public:
 
 	bool LogInAsUser();
 
-	vector<User*>::iterator FindByLogin(string login);
+	vector<shared_ptr<User>>::iterator FindByLogin(string login);
 
 	void DeleteStudent(vector <Student*>::iterator Istudent);
 
-	vector<User*>::iterator users_end();
+	vector<shared_ptr<User>>::iterator users_end();
 
 	void AdminMenu();
 

@@ -142,6 +142,7 @@
     <ClInclude Include="Users.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="ScolarshipReport.txt" />
     <Text Include="Students.txt" />
     <Text Include="Users.txt" />
   </ItemGroup>

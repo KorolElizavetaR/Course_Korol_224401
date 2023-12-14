@@ -54,5 +54,6 @@
   <ItemGroup>
     <Text Include="Users.txt" />
     <Text Include="Students.txt" />
+    <Text Include="ScolarshipReport.txt" />
   </ItemGroup>
 </Project>
