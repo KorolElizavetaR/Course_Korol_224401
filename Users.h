@@ -5,20 +5,19 @@
 using namespace std;
 class System;
 
-class User
+class USER0
 {
 protected:
 	string login;
 	string password;
 	bool role;
-    friend ostream& operator<<(ostream& os, const User& user);
+    friend ostream& operator<<(ostream& os, const USER0& user);
+    USER0();
 public:
-    User(string login, string password);
-    User();
 
     string GetLogin();
     string GetPassword();
-    virtual string GetStringRole();
+    virtual string GetStringRole() = 0;
     void SetLogin(System& log);
     void SetPassword();
     bool GetRole();
@@ -28,16 +27,25 @@ public:
     void SetPasswordWITHOUTRESTRICTION(string password);
 };
 
-class Admin : public User
+class User :public USER0
 {
 public:
-    Admin();
-    Admin(string name, string password);
+    User();
+    User(string login, string password);
 
     string GetStringRole() override;
 };
 
-inline ostream& operator<<(ostream& os, const User& user)
+class Admin : public USER0
+{
+public:
+    Admin();
+    Admin(string login, string password);
+
+    string GetStringRole() override;
+};
+
+inline ostream& operator<<(ostream& os, const USER0& user)
 {
     os << setw(40) << left << user.login << setw(40) << user.password << setw(40) << user.role;
     return os;

@@ -21,7 +21,7 @@
     <ClCompile Include="System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="User.cpp">
+    <ClCompile Include="USER0.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Admin.cpp">
@@ -31,6 +31,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scholarship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

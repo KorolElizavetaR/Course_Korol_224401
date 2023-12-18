@@ -26,31 +26,22 @@ double Scholarship::GetPersantageOfBenefit(int benefit)
 	switch (benefit)
 	{
 	case 0:
-		//отсуствие льготы
 		return 0;
 	case 1:
-		// 1. Студент с ребенком
 		return 0.4;
 	case 2:
-		// 2. Военник
 		return 0.3;
 	case 3:
-		// 3. Инвалид
 		return 0.35;
 	case 4:
-		// 4. Сирота
 		return 0.5;
 	case 5:
-		// 5. Олимпиадник
 		return 0.25;
 	case 6:
-		// 6. Защищенная научно-исследовательская работа
 		return 0.3;
 	case 7:
-		// 7. ЧАЭС жертвы
 		return 0.3;
 	case 8:
-		// 8. Малоимущий студент
 		return 0.5;
 	default:
 		throw exception("Такого кода льготы нет.");

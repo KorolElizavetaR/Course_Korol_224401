@@ -28,9 +28,9 @@ void System::Fillauthorizationfile()
 		file >> login >> password >> role;
 		password = PasswordDecipher(password, CAEASAR_CIPHER);
 		if (role == "0")
-			users.push_back(shared_ptr<User> (new User(login, password)));
+			users.push_back(shared_ptr<USER0> (new User(login, password)));
 		else if (role == "1")
-			users.push_back(shared_ptr<User>(new Admin(login, password)));
+			users.push_back(shared_ptr<USER0>(new Admin(login, password)));
 	}
 
 	file.close();
@@ -88,7 +88,7 @@ bool System::LogInAsUser()
 		cout << "\n";
 		try
 		{
-			vector<shared_ptr<User>>::iterator Iuser;
+			vector<shared_ptr<USER0>>::iterator Iuser;
 			Iuser = FindByLogin(login);
 			if ((*Iuser)->GetPassword() == password)
 			{
@@ -109,9 +109,9 @@ bool System::LogInAsUser()
 	return false;
 }
 
-vector<shared_ptr<User>>::iterator System::FindByLogin(string login)
+vector<shared_ptr<USER0>>::iterator System::FindByLogin(string login)
 {
-	for (vector<shared_ptr<User>>::iterator Iuser = users.begin(); Iuser != users.end(); Iuser++)
+	for (vector<shared_ptr<USER0>>::iterator Iuser = users.begin(); Iuser != users.end(); Iuser++)
 	{
 		if ((*Iuser)->GetLogin() == login)
 		{
@@ -145,7 +145,7 @@ void System::Menu()
 	}
 }
 
-vector<shared_ptr<User>>::iterator System::users_end()
+vector<shared_ptr<USER0>>::iterator System::users_end()
 {
 	return users.end();
 }
@@ -250,14 +250,14 @@ void System::AddAccount(int choice)
 	char option;
 	string login;
 	string password;
-	shared_ptr<User> user;
+	shared_ptr<USER0> user;
 	switch (choice)
 	{
 	case 1:
-		user = shared_ptr<User> (new Admin());
+		user = shared_ptr<USER0> (new Admin());
 		break;
 	case 2:
-		user = shared_ptr<User> (new User());
+		user = shared_ptr<USER0> (new User());
 		break;
 	case 3:
 		return;
@@ -291,7 +291,7 @@ void System::EditAccount()
 	string login;
 	string password;
 	int choice;
-	vector<shared_ptr<User>>::iterator Current_User;
+	vector<shared_ptr<USER0>>::iterator Current_User;
 	cout << "¬ведите логин аккаунта, информацию о котором нужно изменить:";
 	cin.ignore(cin.rdbuf()->in_avail());
 	cin >> noskipws >> login;
@@ -354,7 +354,7 @@ void System::EditAccount()
 void System::PrintAllAccounts()
 {
 	cout << setw(40) << left << "Ћќ√»Ќ" << setw(40) << "ѕј–ќЋ№" << setw(40) << "–ќЋ№" << endl;
-	for (shared_ptr<User> user : users)
+	for (shared_ptr<USER0> user : users)
 	{
 		cout << *user << endl;
 	}
@@ -366,7 +366,7 @@ void System::DeleteAccount()
 	string login;
 	string password;
 	int choice;
-	vector<shared_ptr<User>>::iterator Current_User;
+	vector<shared_ptr<USER0>>::iterator Current_User;
 	cout << "¬ведите логин аккаунта, информацию о котором нужно удалить:";
 	cin.ignore(cin.rdbuf()->in_avail());
 	cin >> noskipws >> login;

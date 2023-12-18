@@ -10,8 +10,8 @@
 
 class System
 {
-	vector <shared_ptr<User>> users;
-	vector<shared_ptr<User>>::iterator AuthorizedUser;
+	vector <shared_ptr<USER0>> users;
+	vector<shared_ptr<USER0>>::iterator AuthorizedUser;
 	vector <Student*> students;
 
 	string PasswordDecipher(string password , int CIPHERCODE);
@@ -33,11 +33,11 @@ public:
 
 	bool LogInAsUser();
 
-	vector<shared_ptr<User>>::iterator FindByLogin(string login);
+	vector<shared_ptr<USER0>>::iterator FindByLogin(string login);
 
 	void DeleteStudent(vector <Student*>::iterator Istudent);
 
-	vector<shared_ptr<User>>::iterator users_end();
+	vector<shared_ptr<USER0>>::iterator users_end();
 
 	void AdminMenu();
 

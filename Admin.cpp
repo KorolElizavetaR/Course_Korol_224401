@@ -1,12 +1,14 @@
 #include "System.h"
 
-Admin::Admin():User()
+Admin::Admin()
 {
 	this->role = true;
 }
-Admin::Admin(string name, string password):User(name, password)
+
+Admin::Admin(string login, string password):Admin()
 {
-	this->role = true;
+	this->password = password;
+	this->login = login;
 }
 
 string Admin::GetStringRole()
