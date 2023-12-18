@@ -12,9 +12,7 @@ class System
 {
 	vector <shared_ptr<User>> users;
 	vector<shared_ptr<User>>::iterator AuthorizedUser;
-
 	vector <Student*> students;
-
 
 	string PasswordDecipher(string password , int CIPHERCODE);
 
